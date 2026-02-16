@@ -37,4 +37,4 @@ echo "$(pwd)" >> /home/ec2-user/install-logs.txt
 chmod u+x run.sh
 
 # Execute the run.sh script to start the application
-# ./run.sh
+./run.sh
