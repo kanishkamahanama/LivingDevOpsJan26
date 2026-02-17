@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# =============================================================================
+# EC2 User Data Script Template for Student Registration Application
+# =============================================================================
+# This is a TEMPLATE - copy to user-data.sh and update with your values
+# 
+# Instructions:
+# 1. Copy this file: cp user-data.sh.example user-data.sh
+# 2. Update the database credentials below
+# 3. Use user-data.sh when launching EC2 (DO NOT commit user-data.sh to GitHub)
+# =============================================================================
+
+# Database Configuration - UPDATE THESE VALUES BEFORE USING
+export DB_HOST="your-rds-endpoint.region.rds.amazonaws.com"
+export DB_NAME="your-database-name"
+export DB_USER="postgres"
+export DB_PASSWORD="YOUR_SECURE_PASSWORD_HERE"  # CHANGE THIS!
+export DB_PORT="5432"
+export DB_SSL_MODE="require"
+
+# Optional: Set a secure secret key for Flask
+export SECRET_KEY="$(openssl rand -base64 32)"
+
+# =============================================================================
+# Application Deployment (No changes needed below)
+# =============================================================================
+
+# Wait for EC2 instance to fully initialize
+sleep 30
+
+# Change to ec2-user home directory
+cd /home/ec2-user
+
+# Log the current directory
+echo "$(pwd)" >> /home/ec2-user/install-logs.txt
+echo "Starting deployment at $(date)" >> /home/ec2-user/install-logs.txt
+
+# Install Git
+sudo yum install git -y
+
+# Clone the repository - UPDATE WITH YOUR GITHUB URL
+git clone --no-checkout https://github.com/YOUR-USERNAME/YOUR-REPO.git
+
+# Navigate into repository
+cd YOUR-REPO
+
+# Use sparse checkout to only get the specific folder
+git sparse-checkout init --cone
+git sparse-checkout set week03/two-tier-app  # Update path if different
+git checkout main
+
+# Navigate to application directory
+cd week03/two-tier-app
+
+# Log current directory
+echo "$(pwd)" >> /home/ec2-user/install-logs.txt
+
+# Make scripts executable
+chmod u+x run.sh
+chmod u+x init_db.py
+
+# Export environment variables for the application
+export DB_HOST="$DB_HOST"
+export DB_NAME="$DB_NAME"
+export DB_USER="$DB_USER"
+export DB_PASSWORD="$DB_PASSWORD"
+export DB_PORT="$DB_PORT"
+export DB_SSL_MODE="$DB_SSL_MODE"
+export SECRET_KEY="$SECRET_KEY"
+
+# Log deployment info (without password)
+echo "Deployed with DB_HOST=$DB_HOST DB_NAME=$DB_NAME" >> /home/ec2-user/install-logs.txt
+
+# Run the application
+./run.sh >> /home/ec2-user/install-logs.txt 2>&1
