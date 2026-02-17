@@ -40,10 +40,10 @@ echo "Starting deployment at $(date)" >> /home/ec2-user/install-logs.txt
 sudo yum install git -y
 
 # Clone the repository - UPDATE WITH YOUR GITHUB URL
-git clone --no-checkout https://github.com/YOUR-USERNAME/YOUR-REPO.git
+git clone --no-checkout https://github.com/kanishkamahanama/LivingDevOpsJan26.git
 
 # Navigate into repository
-cd YOUR-REPO
+cd LivingDevOpsJan26
 
 # Use sparse checkout to only get the specific folder
 git sparse-checkout init --cone
