@@ -1,0 +1,4 @@
+import {
+  to = aws_ecs_task_definition.manualimport
+  id = "arn:aws:ecs:us-east-1:<AWS-ACC-ID>:task-definition/jan26week5-studentportal-td:5"
+}
