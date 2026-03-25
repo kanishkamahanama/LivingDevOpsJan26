@@ -20,8 +20,10 @@ jobs:
           echo "Hello World"
           echo "Welcome to GitHub Actions"
           echo "This is a multi-line shell command"
+          sleep 10
 
   second_job:
+    needs: first_job
     runs-on: windows-latest
 
     steps:
@@ -30,8 +32,7 @@ jobs:
 
       - name: Multiple Windows commands
         run: |
-          echo "Hello World"
-          echo "Welcome to GitHub Actions on Windows"
-          dir
+          Write-Host "Hello World"
+          Write-Host "Welcome to GitHub Actions on Windows"
           Get-ChildItem
 
