@@ -1,0 +1,23 @@
+name: first workflow
+
+on:
+  # manually trigger the workflow
+  workflow_dispatch:
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    # runs-on: windows-latest
+    # runs-on: macos-latest
+
+    steps:
+      - name: single shell command
+        run: echo "Hello World"
+
+      - name: multiple shell commands
+        run: |
+          echo "Hello World"
+          echo "Welcome to GitHub Actions"
+          echo "This is a multi-line shell command"
+

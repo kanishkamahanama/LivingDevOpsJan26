@@ -1,0 +1,56 @@
+# __generated__ by Terraform
+# Please review these resources and move them into your main configuration files.
+
+# __generated__ by Terraform from "arn:aws:ecs:us-east-1:<AWS-ACC-ID>:task-definition/jan26week5-studentportal-td:5"
+resource "aws_ecs_task_definition" "manualimport" {
+  container_definitions = jsonencode([{
+    environment = [{
+      name  = "DB_LINK"
+      value = "postgresql://postgres:<password>@jan26week5-studentportal-instance.<instance ID>.us-east-1.rds.amazonaws.com:5432/studentportal_db"
+    }]
+    environmentFiles = []
+    essential        = true
+    image            = "<AWS-ACC-ID>.dkr.ecr.us-east-1.amazonaws.com/jan26week5-studentportal@sha256:496c510c912a1681b39928a717cb8b8b4cd5e3fd55a88736366b621b7eb3e5f4"
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-create-group  = "true"
+        awslogs-group         = "/ecs/jan26week5-studentportal-td"
+        awslogs-region        = "us-east-1"
+        awslogs-stream-prefix = "ecs"
+      }
+      secretOptions = []
+    }
+    memory      = 2048
+    mountPoints = []
+    name        = "studentportal-container"
+    portMappings = [{
+      appProtocol   = "http"
+      containerPort = 8000
+      hostPort      = 8000
+      name          = "studentportal-container-8000-tcp"
+      protocol      = "tcp"
+    }]
+    systemControls = []
+    ulimits        = []
+    volumesFrom    = []
+  }])
+  cpu                      = "1024"
+  enable_fault_injection   = false
+  execution_role_arn       = "arn:aws:iam::<AWS-ACC-ID>:role/ecsTaskExecutionRole"
+  family                   = "jan26week5-studentportal-td"
+  ipc_mode                 = null
+  memory                   = "3072"
+  network_mode             = "awsvpc"
+  pid_mode                 = null
+  requires_compatibilities = ["FARGATE"]
+  skip_destroy             = null
+  tags                     = {}
+  tags_all                 = {}
+  task_role_arn            = "arn:aws:iam::<AWS-ACC-ID>:role/jan26week5-studentportal-iam-role"
+  track_latest             = false
+  runtime_platform {
+    cpu_architecture        = "X86_64"
+    operating_system_family = "LINUX"
+  }
+}
