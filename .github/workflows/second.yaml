@@ -1,9 +1,10 @@
 name: second workflow
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
     
 # workflow level environment variable
 env:

@@ -1,2 +1,0 @@
-# second workflow status
-[![second workflow](https://github.com/kanishkamahanama/LivingDevOpsJan26/actions/workflows/second.yaml/badge.svg)](https://github.com/kanishkamahanama/LivingDevOpsJan26/actions/workflows/second.yaml)
