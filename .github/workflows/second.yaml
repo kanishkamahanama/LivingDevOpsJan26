@@ -2,6 +2,8 @@ name: second workflow
 
 on:
   push:
+    branches:
+      - main
     
 # workflow level environment variable
 env:
