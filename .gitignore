@@ -99,3 +99,9 @@ desktop.ini
 *.temp
 *.bak
 *.backup
+
+# ===================================
+# Not push to GitHub Files
+# ===================================
+week04/
+week05/
