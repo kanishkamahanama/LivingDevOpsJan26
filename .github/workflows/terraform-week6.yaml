@@ -5,12 +5,12 @@ on:
   push:
     branches:
       - main
-  
-  env:
-    AWS_REGION: us-east-1
-    Terraform_Version: 1.12.1
-    infra_path: week07/infra/
-  
+
+env:
+  AWS_REGION: us-east-1
+  Terraform_Version: 1.12.1
+  infra_path: week07/infra/
+
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
