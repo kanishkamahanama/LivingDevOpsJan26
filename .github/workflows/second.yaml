@@ -1,0 +1,47 @@
+name: second workflow
+
+on:
+  push:
+    
+# workflow level environment variable
+env:
+  WORKFLOW_GREETING: "Hello from the second workflow!"
+
+jobs:
+  job1:
+    
+    # job level environment variable
+    env:
+      JOB_GREETING: "Hello from Job 1!"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: |
+          echo "env from workflow: ${{env.WORKFLOW_GREETING}}"
+          echo "env from job: ${{env.JOB_GREETING}}"
+          echo "env from step: ${{env.STEP_GREETING}}"
+      
+      - name: Run a multi-line script
+        # step level environment variable
+        env:
+          STEP_GREETING: "Hello from Step 2!"
+        run: |
+          echo "This is a multi-line script."
+          echo "It can contain multiple commands."
+          echo "env from step: ${{env.WORKFLOW_GREETING}}"
+          echo "env from step: ${{env.JOB_GREETING}}"
+          echo "env from step: ${{env.STEP_GREETING}}"
+
+  Job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a multi-line script
+        run: |
+          echo "This is a multi-line script."
+          echo "It can contain multiple commands."
+          echo "Each command is executed in sequence."
+          echo "env from workflow: ${{env.WORKFLOW_GREETING}}"
+          echo "env from job: ${{env.JOB_GREETING}}"
+          echo "env from step: ${{env.STEP_GREETING}}"
