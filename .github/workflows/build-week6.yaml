@@ -54,9 +54,11 @@ jobs:
       ecs_cluster: jan26-bootcamp-student-portal
       ecs_service: jan26-bootcamp-student-portal-service
       ecs_task_definition: jan26-bootcamp-student-portal-task
-      new_image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
     steps:
+      - name: Set image variable
+        run: echo "NEW_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -70,7 +72,7 @@ jobs:
       - name: Update task definition with new image
         run: |
           # Update the container image in the task definition JSON
-          jq --arg IMAGE "${{ env.new_image }}" '.containerDefinitions[0].image = $IMAGE' task-definition.json > updated-task-definition.json
+          jq --arg IMAGE "${{ env.NEW_IMAGE }}" '.containerDefinitions[0].image = $IMAGE' task-definition.json > updated-task-definition.json
           mv updated-task-definition.json task-definition.json
 
       - name: Deploy to Amazon ECS
