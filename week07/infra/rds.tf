@@ -23,6 +23,7 @@ output "password" {
 
 resource "aws_secretsmanager_secret" "db_password" {
   name = "${var.prefix}-${var.app_name}-db"
+  recovery_window_in_days = 0
 }
 
 # create secret in secret manager (version)
