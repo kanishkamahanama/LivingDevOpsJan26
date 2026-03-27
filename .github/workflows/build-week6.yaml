@@ -11,7 +11,7 @@ env:
   ECR_REGISTRY: 589613068744.dkr.ecr.us-east-1.amazonaws.com
   ECR_REPOSITORY: jan26week5-studentportal
   IMAGE_TAG: ${{ github.sha }} # Use the commit ID SHA as the image tag and $GITHUB_SHA also works
-  app_path: week7/app/
+  app_path: week07/app/
 
 jobs:
   build-and-push:
