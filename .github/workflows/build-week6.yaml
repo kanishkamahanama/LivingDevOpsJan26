@@ -43,4 +43,42 @@ jobs:
           # docker push 589613068744.dkr.ecr.us-east-1.amazonaws.com/jan26week5-studentportal:688668cc928a90bc571c29e7b888a14cd26bf234
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
+  # normaly when we need new depolyment in ECS, I  neeed to modify the task definition and create new version of task definition and 
+  # then update the service to use the new version of task definition
+
+  ecs-deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    env:
+      ecs_cluster: jan26-bootcamp-student-portal
+      ecs_service: jan26-bootcamp-student-portal-service
+      ecs_task_definition: jan26-bootcamp-student-portal-task
+      new_image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download task definition
+        run: aws ecs describe-task-definition --task-definition ${{ env.ecs_task_definition }} --query taskDefinition > task-definition.json
+
+      - name: Update task definition with new image
+        run: |
+          # Update the container image in the task definition JSON
+          jq --arg IMAGE "${{ env.new_image }}" '.containerDefinitions[0].image = $IMAGE' task-definition.json > updated-task-definition.json
+          mv updated-task-definition.json task-definition.json
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: task-definition.json
+          service: ${{ env.ecs_service }}
+          cluster: ${{ env.ecs_cluster }}
+          wait-for-service-stability: true
+                
 
