@@ -11,7 +11,7 @@ resource "aws_db_subnet_group" "default" {
 # search - terraform random for password
 resource "random_password" "password" {
   length  = 10
-  special = true
+  special = false
 }
 
 output "password" {
