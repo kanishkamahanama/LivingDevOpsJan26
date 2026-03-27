@@ -1,10 +1,7 @@
-name: Week6 ecs terraform apply
+name: Week6 ecs terraform destroy
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
 
 env:
   AWS_REGION: us-east-1
@@ -35,6 +32,6 @@ jobs:
         working-directory: ${{ env.infra_path }}
         run: terraform init
 
-      - name: Terraform Apply
+      - name: Terraform Destroy
         working-directory: ${{ env.infra_path }}
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
