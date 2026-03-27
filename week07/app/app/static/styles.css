@@ -1,120 +1,104 @@
 /* Custom Properties */
 :root {
-    --primary: #2c3e50;
-    --secondary: #3498db;
-    --danger: #e74c3c;
-    --success: #2ecc71;
-    --transition: all 0.3s ease;
-  }
-  
-  /* Custom Animations */
-  @keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  /* Mobile Menu Styles */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 6px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 50;
-  }
-  
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: white;
+  --primary:      #4c1d95;   /* deep violet */
+  --primary-mid:  #7c3aed;   /* vivid violet */
+  --secondary:    #6366f1;   /* indigo */
+  --accent:       #a78bfa;   /* soft lavender */
+  --danger:       #f43f5e;   /* rose-red */
+  --success:      #10b981;   /* emerald */
+  --surface:      #1e1b4b;   /* deep indigo bg */
+  --text-on-dark: #ede9fe;   /* lavender 50 */
+  --transition:   all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom Animations */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Menu Styles */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 50;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.hamburger:hover {
+  background: rgba(167, 139, 250, 0.15);
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--accent);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* Mobile Menu Animation */
+.hamburger.active span:first-child  { transform: translateY(8px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.active span:last-child   { transform: translateY(-8px) rotate(-45deg); }
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 270px;
+    height: 100vh;
+    background-color: var(--surface);
+    border-left: 1px solid rgba(167, 139, 250, 0.2);
+    box-shadow: -8px 0 32px rgba(76, 29, 149, 0.4);
+    padding: 1.5rem;
     transition: var(--transition);
+    z-index: 40;
   }
-  
-  /* Mobile Menu Animation */
-  .hamburger.active span:first-child {
-    transform: translateY(8px) rotate(45deg);
+  .mobile-menu.active { right: 0; }
+
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 10, 40, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 30;
   }
-  
-  .hamburger.active span:nth-child(2) {
-    opacity: 0;
+  .mobile-overlay.active {
+    display: block;
+    animation: fadeIn 0.2s ease;
   }
-  
-  .hamburger.active span:last-child {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-  
-  /* Mobile Navigation */
-  @media (max-width: 768px) {
-    .hamburger {
-      display: flex;
-    }
-  
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 250px;
-      height: 100vh;
-      background-color: var(--primary);
-      padding: 1rem;
-      transition: var(--transition);
-      z-index: 40;
-    }
-  
-    .mobile-menu.active {
-      right: 0;
-    }
-  
-    .mobile-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 30;
-    }
-  
-    .mobile-overlay.active {
-      display: block;
-    }
-  }
-  
-  /* Custom Modal Animation */
-  .modal {
-    animation: fadeIn 0.3s ease;
-  }
-  
-  /* Custom Scrollbar */
-  .custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 3px;
-  }
-  
-  /* Utility classes for animations */
-  .fade-in {
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .slide-in {
-    animation: slideIn 0.3s ease;
-  }
+}
+
+/* Custom Modal Animation */
+.modal { animation: fadeIn 0.3s ease; }
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-mid) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar       { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--primary-mid);
+  border-radius: 10px;
+}
+
+/* Utility classes */
+.fade-in  { animation: fadeIn  0.35s ease both; }
+.slide-in { animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
