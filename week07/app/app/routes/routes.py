@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+import csv
+import io
+from flask import Blueprint, render_template, request, redirect, url_for, flash, Response
 from flask_login import login_required, current_user
 from app.models.models import Student, Attendance, db, Class
 from datetime import datetime, date
@@ -26,11 +28,21 @@ def dashboard():
         (total_present / total_records * 100) if total_records > 0 else 0, 1
     )
 
+    at_risk = []
+    for student in Student.query.all():
+        total_days = Attendance.query.filter_by(student_id=student.id).count()
+        if total_days > 0:
+            present_days = Attendance.query.filter_by(student_id=student.id, status="Present").count()
+            rate = round(present_days / total_days * 100, 1)
+            if rate < 75:
+                at_risk.append({"student": student, "rate": rate})
+
     return render_template(
         "dashboard.html",
         total_students=total_students,
         today_attendance=f"{today_attendance}/{total_students}",
         attendance_rate=attendance_rate,
+        at_risk=at_risk,
     )
 
 
@@ -107,6 +119,45 @@ def mark_attendance():
     except Exception as e:
         flash("Error marking attendance", "error")
         return redirect(url_for("main.attendance"))
+
+
+@bp.route("/student/<int:id>")
+@login_required
+def student_report(id):
+    student = Student.query.get_or_404(id)
+    records = Attendance.query.filter_by(student_id=id).order_by(Attendance.date.desc()).all()
+    total_days = len(records)
+    present_days = sum(1 for r in records if r.status == "Present")
+    absent_days = total_days - present_days
+    rate = round(present_days / total_days * 100, 1) if total_days > 0 else 0
+    return render_template(
+        "student_report.html",
+        student=student,
+        records=records,
+        total_days=total_days,
+        present_days=present_days,
+        absent_days=absent_days,
+        rate=rate,
+    )
+
+
+@bp.route("/export/attendance")
+@login_required
+def export_attendance():
+    students = Student.query.all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Student ID", "Student Name", "Date", "Status"])
+    for student in students:
+        records = Attendance.query.filter_by(student_id=student.id).order_by(Attendance.date).all()
+        for record in records:
+            writer.writerow([student.id, student.name, record.date, record.status])
+    output.seek(0)
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=attendance.csv"},
+    )
 
 
 @bp.route("/edit_student/<int:id>", methods=["POST"])

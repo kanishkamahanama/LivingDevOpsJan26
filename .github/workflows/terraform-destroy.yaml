@@ -11,6 +11,7 @@ env:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - name: Checkout code

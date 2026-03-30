@@ -49,6 +49,7 @@ jobs:
   ecs-deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    environment: dev
 
     env:
       ecs_cluster: jan26-bootcamp-student-portal
