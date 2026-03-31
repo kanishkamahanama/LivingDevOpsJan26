@@ -6,3 +6,4 @@ Werkzeug>=2.0.0
 bcrypt
 prometheus-client
 python-json-logger
+pytest
