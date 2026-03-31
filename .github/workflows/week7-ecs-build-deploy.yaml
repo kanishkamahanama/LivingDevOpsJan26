@@ -40,7 +40,7 @@ jobs:
           docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
       
       - name: scan the container
-        uses: aquasecurity/trivy-action@main
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           format: 'table'
